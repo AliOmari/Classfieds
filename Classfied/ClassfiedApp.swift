@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct ClassfiedApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView(advertisments: (0...100).map { _ in Holder.ad })
         }
     }
 }
