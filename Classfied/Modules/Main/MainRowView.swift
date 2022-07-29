@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Core
 
 struct MainRowView: View {
     
@@ -22,7 +23,7 @@ struct MainRowView: View {
 
 struct RowView_Previews: PreviewProvider {
     static var previews: some View {
-        MainRowView(advertisment: Holder.ad)
+        MainRowView(advertisment: advertisments[0])
             .previewLayout(.sizeThatFits)
             .frame(width: 250.0, height: 50.0)
     }

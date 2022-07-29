@@ -12,7 +12,7 @@ struct ClassfiedApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainView(advertisments: (0...100).map { _ in Holder.ad })
+            MainView()
         }
     }
 }

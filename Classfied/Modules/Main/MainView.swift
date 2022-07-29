@@ -6,19 +6,24 @@
 //
 
 import SwiftUI
+import Core
 
 struct MainView: View {
-    let advertisments: [Advertisment]
+    
+    @ObservedObject private var viewModel = MainViewModel()
     
     var body: some View {
-        List(advertisments) {
+        
+        List(viewModel.ads) {
             MainRowView(advertisment: $0)
+        }.onAppear {
+            self.viewModel.fetchClassifiedAds()
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(advertisments: (0...100).map { _ in Holder.ad })
+        MainView()
     }
 }
