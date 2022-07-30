@@ -14,8 +14,11 @@ struct MainRowView: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
-            NetworkImage(imageURL: URL(string: advertisment.imageUrls[0]))
-                .frame(width: 100, height: 100, alignment: .center)
+            NetworkImage(url: URL(string: advertisment.imageUrls[0])!) {
+                ProgressView()
+            } image: { Image(uiImage: $0).resizable() }
+            .frame(width: 100, height: 100, alignment: .center)
+            .cornerRadius(10)
             VStack(alignment: .leading, spacing: 10){
                 Text(advertisment.name)
                     .font(.headline)

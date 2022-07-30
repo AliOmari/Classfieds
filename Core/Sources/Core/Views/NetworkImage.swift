@@ -1,43 +1,41 @@
 //
 //  NetworkImage.swift
-//  Classfied
+//  
 //
-//  Created by Ali Omari on 7/28/22.
+//  Created by Ali Omari on 31/07/2022.
 //
 
 import SwiftUI
 
-@available(iOS 15.0.0, *)
-public struct NetworkImage: View {
+@available(iOS 14.0.0, *)
+public struct NetworkImage<Placeholder: View>: View {
     
-    public let imageURL: URL?
+    @StateObject private var loader: ImageLoader
+    private let placeholder: Placeholder
+    private let image: (UIImage) -> Image
     
-    public init(imageURL: URL?) {
-        self.imageURL = imageURL
+    public init(
+        url: URL,
+        @ViewBuilder placeholder: () -> Placeholder,
+        @ViewBuilder image: @escaping (UIImage) -> Image = Image.init(uiImage:)
+    ) {
+        self.placeholder = placeholder()
+        self.image = image
+        _loader = StateObject(wrappedValue: ImageLoader(url: url, cache: Environment(\.imageCache).wrappedValue))
     }
     
     public var body: some View {
-        VStack {
-            AsyncImage(url: imageURL) { phase in
-                switch phase {
-                case .success(let image):
-                    image.resizable()
-                case .empty:
-                    ProgressView()
-                case .failure(_):
-                    Color.red
-                @unknown default:
-                    Color.red
-                }
-            }
-        }.cornerRadius(10)
+        content
+            .onAppear(perform: loader.load)
     }
-}
-
-@available(iOS 15.0.0, *)
-struct NetworkImage_Previews: PreviewProvider {
-    static var previews: some View {
-        NetworkImage(imageURL: URL(string: "https://source.unsplash.com/user/c_v_r/1900x800"))
-            .previewLayout(.sizeThatFits)
+    
+    private var content: some View {
+        Group {
+            if loader.image != nil {
+                image(loader.image!)
+            } else {
+                placeholder
+            }
+        }
     }
 }

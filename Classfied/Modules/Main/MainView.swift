@@ -16,8 +16,12 @@ struct MainView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                List(viewModel.ads) {
-                    MainRowView(advertisment: $0)
+                List(viewModel.ads) { classfiedAd in
+                    NavigationLink {
+                        DetailsView(advertisment: classfiedAd)
+                    } label: {
+                        MainRowView(advertisment: classfiedAd)
+                    }
                 }.onAppear {
                     self.viewModel.fetchClassifiedAds()
                 }.onReceive(viewModel.$ads) { ads in
